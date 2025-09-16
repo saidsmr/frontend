@@ -1,1 +1,42 @@
-<p>products works!</p>
+<div class="container mt-4">
+  <h2>Product Management</h2>
+
+  <!-- Add Product -->
+  <div class="mb-3">
+    <input [(ngModel)]="newProduct.name" placeholder="Name" class="form-control mb-2" />
+    <input [(ngModel)]="newProduct.price" placeholder="Price" type="number" class="form-control mb-2" />
+    <button (click)="addProduct()" class="btn btn-primary">Add Product</button>
+  </div>
+
+  <!-- Update Product -->
+  <div *ngIf="selectedProduct" class="mb-3">
+    <h5>Edit Product</h5>
+    <input [(ngModel)]="selectedProduct.name" placeholder="Name" class="form-control mb-2" />
+    <input [(ngModel)]="selectedProduct.price" placeholder="Price" type="number" class="form-control mb-2" />
+    <button (click)="updateProduct()" class="btn btn-success">Update</button>
+    <button (click)="selectedProduct = undefined" class="btn btn-secondary">Cancel</button>
+  </div>
+
+  <!-- List Products -->
+  <table class="table table-bordered mt-3">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Price (€)</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let p of products">
+        <td>{{ p.id }}</td>
+        <td>{{ p.name }}</td>
+        <td>{{ p.price }}</td>
+        <td>
+          <button (click)="editProduct(p)" class="btn btn-warning btn-sm">Edit</button>
+          <button (click)="deleteProduct(p.id!)" class="btn btn-danger btn-sm">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

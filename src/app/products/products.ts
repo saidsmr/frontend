@@ -1,11 +1,55 @@
-import { Component } from '@angular/core';
+import { Component, NgModule, OnInit } from '@angular/core';
+import { Product } from '../model/product.model';
+import { Productsservices } from '../services/productsservices';
+
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';   
+
 
 @Component({
   selector: 'app-products',
-  imports: [],
+  standalone: true,
+  imports: [CommonModule, FormsModule],   
   templateUrl: './products.html',
-  styleUrl: './products.css'
+  styleUrls: ['./products.css']
 })
-export class Products {
 
+export class Products implements OnInit {
+  products: Product[] = [];
+  newProduct: Product = { name: '', price: 0 };
+  selectedProduct?: Product;
+
+  constructor(private productsservices: Productsservices) {}
+
+  ngOnInit(): void {
+    this.loadProducts();
+  }
+
+  loadProducts(): void {
+    this.productsservices.getProducts().subscribe(data => this.products = data);
+  }
+
+  addProduct(): void {
+    this.productsservices.createProduct(this.newProduct).subscribe(() => {
+      this.newProduct = { name: '', price: 0 };
+      this.loadProducts();
+    });
+  }
+
+  editProduct(product: Product): void {
+    this.selectedProduct = { ...product };
+  }
+
+  updateProduct(): void {
+    if (this.selectedProduct) {
+      this.productsservices.updateProduct(this.selectedProduct).subscribe(() => {
+        this.selectedProduct = undefined;
+        this.loadProducts();
+      });
+    }
+  }
+
+  deleteProduct(id: number): void {
+    this.productsservices.deleteProduct(id).subscribe(() => this.loadProducts());
+  }
 }
