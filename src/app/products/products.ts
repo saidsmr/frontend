@@ -19,14 +19,23 @@ export class Products implements OnInit {
   newProduct: Product = { name: '', price: 0 };
   selectedProduct?: Product;
 
-  constructor(private productsservices: Productsservices) {}
+  constructor(private productsservices: Productsservices) {  this.loadProducts();}
 
   ngOnInit(): void {
-    this.loadProducts();
+  
   }
 
   loadProducts(): void {
-    this.productsservices.getProducts().subscribe(data => this.products = data);
+     this.productsservices.getProducts().subscribe({
+    next: (data) => {
+     //  console.log("✅ Produits reçus :", data);
+      this.products = data;
+    },
+    error: (err) => {
+      console.error("❌ Erreur lors du chargement des produits :", err);
+    }
+  });
+  
   }
 
   addProduct(): void {

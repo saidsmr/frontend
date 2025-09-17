@@ -1,1 +1,52 @@
-<p>customers works!</p>
+<!-- src/app/customers/customers.html -->
+<div class="container mt-4">
+  <h2>Gestion des clients</h2>
+
+  <div *ngIf="errorMsg" class="alert alert-danger">{{ errorMsg }}</div>
+
+  <!-- Add -->
+  <div class="mb-3">
+    <input [(ngModel)]="newCustomer.firstName" placeholder="Prénom" class="form-control mb-2" />
+    <input [(ngModel)]="newCustomer.lastName" placeholder="Nom" class="form-control mb-2" />
+    <button (click)="add()" class="btn btn-primary">Ajouter</button>
+  </div>
+
+  <!-- Edit -->
+  <div *ngIf="selectedCustomer" class="mb-3">
+    <h5>Modifier le client</h5>
+    <input [(ngModel)]="selectedCustomer.firstName" placeholder="Prénom" class="form-control mb-2" />
+    <input [(ngModel)]="selectedCustomer.lastName" placeholder="Nom" class="form-control mb-2" />
+    <button (click)="update()" class="btn btn-success">Enregistrer</button>
+    <button (click)="cancelEdit()" class="btn btn-secondary">Annuler</button>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="text-muted">Chargement...</div>
+
+  <!-- List -->
+  <table class="table table-bordered mt-3" *ngIf="customers?.length">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Prénom</th>
+        <th>Nom</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let c of customers">
+        <td>{{ c.id }}</td>
+        <td>{{ c.firstName }}</td>
+        <td>{{ c.lastName }}</td>
+        <td>
+          <button (click)="edit(c)" class="btn btn-warning btn-sm">Modifier</button>
+          <button (click)="delete(c.id)" class="btn btn-danger btn-sm">Supprimer</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!loading && (!customers || customers.length === 0)" class="text-muted">
+    Aucun client.
+  </div>
+</div>
